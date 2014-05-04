@@ -1,10 +1,5 @@
 #!/bin/bash
-if [ $HOSTNAME = "alarm" ]
-then
-   OUTPUT=~/CanalPlus
-else
-   OUTPUT=~/Desktop/CanalPlus
-fi
+OUTPUT=~/Desktop/CanalPlus
 
 if [ ! -d $OUTPUT ]
 then
@@ -16,6 +11,7 @@ wget -T 30 -t 10 -q -O index.html "www.canalplus.fr"
 iconv -f iso-8859-1 -t ascii//TRANSLIT//IGNORE index.html > index.html2
 mv index.html2 index.html
 lastId=`cat index.html | grep 'vid=[0-9]' | sed 's/.*vid=\([0-9]*\).*/\1/' | cut -b 1-7 | sort -rg | head -n 1`
+rm -f index.html
 
 if [ -z "$lastId" ]
 then
@@ -39,6 +35,7 @@ do
    then
       link=`cat index.html | sed -n 's/.*<BAS_DEBIT>\([^<]*\)<\/BAS_DEBIT>.*/\1/p'`
    fi
+   rm -f index.html
    download=0
    if [ ! -z "$rubrique" ]
    then
@@ -61,6 +58,7 @@ do
             rm -f $OUTPUT/$filename
             wget -T 30 -t 10 -q -O master.m3u8 "$link"
             sh Download_m3u8.sh `tail -n 1 master.m3u8` $OUTPUT/$filename
+            rm -f master.m3u8
             res_dwnl=0
          fi
          if [ ! -z "`echo $link | grep "rtmp"`" ]
