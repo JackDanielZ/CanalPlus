@@ -45,6 +45,7 @@ do
       if [ "$rubrique" = GROLAND -a "$categorie" = EMISSION ]; then download=1; fi
       if [ "$rubrique" = GROLAND_EMISSIONS -a "$categorie" = INTEGRALE ]; then download=1; fi
       if [ "$rubrique" = "LE_PETIT_JOURNAL" -a "$categorie" = QUOTIDIEN ]; then download=1; fi
+      if [ "$rubrique" = "PETIT_JOURNAL" -a "$categorie" = EMISSION ]; then download=1; fi
    fi
 
    echo $vid: $link
