@@ -1,25 +1,32 @@
 #!/bin/bash
-OUTPUT=~/Desktop/CanalPlus
+# $1: id to download
 
+OUTPUT=~/Desktop/CanalPlus
 if [ ! -d $OUTPUT ]
 then
    mkdir -p $OUTPUT
 fi
 
-rm -f index.html
-wget -T 30 -t 10 -q -O index.html "www.canalplus.fr"
-iconv -f iso-8859-1 -t ascii//TRANSLIT//IGNORE index.html > index.html2
-mv index.html2 index.html
-lastId=`cat index.html | grep 'vid=[0-9]' | sed 's/.*vid=\([0-9]*\).*/\1/' | cut -b 1-7 | sort -rg | head -n 1`
-rm -f index.html
-
-if [ -z "$lastId" ]
+if [ $# -eq 1 ]
 then
-  echo "Problem with lastId retrieval"
-  exit
-fi
+   firstId=$1
+   lastId=$1
+else
+   rm -f index.html
+   wget -T 30 -t 10 -q -O index.html "www.canalplus.fr"
+   iconv -f iso-8859-1 -t ascii//TRANSLIT//IGNORE index.html > index.html2
+   mv index.html2 index.html
+   lastId=`cat index.html | grep 'vid=[0-9]' | sed 's/.*vid=\([0-9]*\).*/\1/' | cut -b 1-7 | sort -rg | head -n 1`
+   rm -f index.html
 
-firstId=`cat lastId`
+   if [ -z "$lastId" ]
+   then
+      echo "Problem with lastId retrieval"
+      exit
+   fi
+
+   firstId=`cat lastId`
+fi
 
 echo FirstId $firstId LastId $lastId
 
@@ -46,6 +53,7 @@ do
       if [ "$rubrique" = GROLAND_EMISSIONS -a "$categorie" = INTEGRALE ]; then download=1; fi
       if [ "$rubrique" = "LE_PETIT_JOURNAL" -a "$categorie" = QUOTIDIEN ]; then download=1; fi
       if [ "$rubrique" = "PETIT_JOURNAL" -a "$categorie" = EMISSION ]; then download=1; fi
+      if [ "$rubrique" = "LE_GRAND_JOURNAL" -a "$categorie" = GORAFI ]; then download=1; fi
    fi
 
    echo $vid: $link
@@ -117,5 +125,9 @@ do
          fi
       fi
    fi
-   echo $vid > lastId
+   # In case no arg is given, we update the lastId file
+   if [ $# -ne 1 ]
+   then
+      echo $vid > lastId
+   fi
 done
