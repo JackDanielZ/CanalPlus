@@ -43,25 +43,25 @@ do
       link=`cat index.html | sed -n 's/.*<BAS_DEBIT>\([^<]*\)<\/BAS_DEBIT>.*/\1/p'`
    fi
    rm -f index.html
-   download=0
+   download=""
    if [ ! -z "$rubrique" ]
    then
       echo $rubrique $categorie $date $link
-      if [ "$rubrique" = ZAPPING -a "$categorie" = EMISSION ]; then download=1; fi
-      if [ "$rubrique" = LES_GUIGNOLS -a "$categorie" = QUOTIDIEN ]; then download=1; fi
-      if [ "$rubrique" = GROLAND -a "$categorie" = EMISSION ]; then download=1; fi
-      if [ "$rubrique" = GROLAND_EMISSIONS -a "$categorie" = INTEGRALE ]; then download=1; fi
-      if [ "$rubrique" = "LE_PETIT_JOURNAL" -a "$categorie" = QUOTIDIEN ]; then download=1; fi
-      if [ "$rubrique" = "PETIT_JOURNAL" -a "$categorie" = EMISSION ]; then download=1; fi
-      if [ "$rubrique" = "LE_GRAND_JOURNAL" -a "$categorie" = GORAFI ]; then download=1; fi
+      if [ "$rubrique" = ZAPPING -a "$categorie" = EMISSION ]; then download="ZAPPING"; fi
+      if [ "$rubrique" = LES_GUIGNOLS -a "$categorie" = QUOTIDIEN ]; then download="GUIGNOLS"; fi
+      if [ "$rubrique" = GROLAND -a "$categorie" = EMISSION ]; then download="GROLAND"; fi
+      if [ "$rubrique" = GROLAND_EMISSIONS -a "$categorie" = INTEGRALE ]; then download="GROLAND"; fi
+      if [ "$rubrique" = "LE_PETIT_JOURNAL" -a "$categorie" = QUOTIDIEN ]; then download="PETIT_JOURNAL"; fi
+      if [ "$rubrique" = "PETIT_JOURNAL" -a "$categorie" = EMISSION ]; then download="PETIT_JOURNAL"; fi
+      if [ "$rubrique" = "LE_GRAND_JOURNAL" -a "$categorie" = GORAFI ]; then download="GORAFI"; fi
    fi
 
    echo $vid: $link
-   if [ $download -eq 1 ]
+   if [ ! -z "$download" ]
    then
       if [ -z `grep $link history` ]
       then
-         filename="$rubrique"_"$date"_"$vid".mp4
+         filename="$download"_"$date"_"$vid".mp4
          if [ ! -z "`echo $link | grep "m3u8"`" ]
          then
             rm -f $OUTPUT/$filename
