@@ -54,6 +54,8 @@ do
       if [ "$rubrique" = "LE_PETIT_JOURNAL" -a "$categorie" = QUOTIDIEN ]; then download="PETIT_JOURNAL"; fi
       if [ "$rubrique" = "PETIT_JOURNAL" -a "$categorie" = EMISSION ]; then download="PETIT_JOURNAL"; fi
       if [ "$rubrique" = "LE_GRAND_JOURNAL" -a "$categorie" = GORAFI ]; then download="GORAFI"; fi
+      if [ "$rubrique" = "CONNASSE" ]; then download="CONNASSE"; fi
+      if [ "$rubrique" = "FILLES_D_AUJOURDHUI" ]; then download="FILLES_D_AUJOURDHUI"; fi
    fi
 
    echo $vid: $link
