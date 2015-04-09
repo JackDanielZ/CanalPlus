@@ -11,6 +11,7 @@ if [ $# -eq 1 ]
 then
    firstId=$1
    lastId=$1
+   special=1
 else
    rm -f index.html
    wget -T 30 -t 10 -q -O index.html "www.canalplus.fr"
@@ -26,6 +27,7 @@ else
    fi
 
    firstId=`cat lastId`
+   special=0
 fi
 
 echo FirstId $firstId LastId $lastId
@@ -57,11 +59,16 @@ do
       if [ "$rubrique" = "CONNASSE" ]; then download="CONNASSE"; fi
       if [ "$rubrique" = "FILLES_D_AUJOURDHUI" ]; then download="FILLES_D_AUJOURDHUI"; fi
    fi
+   if [ $special -eq 1 -a -z "$download" ]
+   then
+      download="SPECIAL"
+   fi
+
 
    echo $vid: $link
    if [ ! -z "$download" ]
    then
-      if [ -z `grep $link history` ]
+      if [ $special -eq 1 -o -z "`grep $link history`" ]
       then
          filename="$download"_"$date"_"$vid".mp4
          if [ ! -z "`echo $link | grep "m3u8"`" ]
