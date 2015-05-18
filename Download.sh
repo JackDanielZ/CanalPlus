@@ -17,7 +17,7 @@ else
    wget -T 30 -t 10 -q -O index.html "www.canalplus.fr"
    iconv -f iso-8859-1 -t ascii//TRANSLIT//IGNORE index.html > index.html2
    mv index.html2 index.html
-   lastId=`cat index.html | grep 'vid=[0-9]' | sed 's/.*vid=\([0-9]*\).*/\1/' | cut -b 1-7 | sort -rg | head -n 1`
+   lastId=`cat index.html | grep 'vid=[0-9]' | tr 'h' '\n' | grep vid= | sed 's/.*vid=\([0-9]*\).*/\1/' | cut -b 1-7 | sort -rg | head -n 1`
    rm -f index.html
 
    if [ -z "$lastId" ]
